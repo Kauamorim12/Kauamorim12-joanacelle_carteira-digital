@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
-/* ===== Constantes ===== */
+/*  Constantes  */
 
 #define TAM_NOME        50
 #define MAX_CONTAS      5
@@ -21,7 +20,7 @@
 #define FATOR_SALDO         10
 #define PERCENTUAL_LIMITE   0.25
 
-/* ===== Structs ===== */
+/*  Structs  */
 
 /* Uma linha do histórico */
 typedef struct {
@@ -45,7 +44,7 @@ typedef struct {
     int   temEmprestimo;      /* só pode um por cliente */
 } Cliente;
 
-/* ===== Variáveis globais ===== */
+/*  Variáveis globais  */
 
 Cliente *clientes = NULL;            /* vetor dinâmico de clientes */
 int qtdClientes = 0;                 /* clientes cadastrados */
@@ -53,7 +52,7 @@ int capacidade = 0;                  /* clientes que cabem na memória reservada
 int bancoAberto = 0;
 int proximoNumero = NUMERO_INICIAL;
 
-/* ===== Leitura do teclado ===== */
+/*  Leitura do teclado  */
 
 /* Descarta o resto da linha (o '\n' que o scanf deixa). */
 void limparBuffer() {
@@ -100,11 +99,11 @@ void lerTexto(char msg[], char destino[], int tam) {
     if (n > 0 && destino[n - 1] == '\n') {
         destino[n - 1] = '\0';
     } else {
-        limparBuffer();             /* texto maior que o vetor: descarta o excesso */
+        limparBuffer();   /* texto maior que o vetor: descarta o excesso */
     }
 }
 
-/* ===== Conta ===== */
+/*  Conta  */
 
 void mostrarTipo(int tipo) {
     switch (tipo) {
@@ -164,7 +163,7 @@ int sacar(Conta *c, float valor) {
     return 1;
 }
 
-/* ===== Cliente ===== */
+/*  Cliente  */
 
 /* Devolve 1 se o cliente tem alguma conta do tipo informado. */
 int temConta(Cliente *cl, int tipo) {
@@ -236,7 +235,7 @@ int abrirConta(Cliente *cl, int tipo, float saldoInicial) {
     return 1;
 }
 
-/* ===== Banco ===== */
+/*  Banco  */
 
 /* Lista os clientes e devolve a posição escolhida no vetor (ou -1). */
 int escolherCliente() {
@@ -486,17 +485,19 @@ void consultarHistorico() {
 }
 
 void efetuarSorteio() {
-    int sorteado;
+    int sorteado, semente;
 
     if (qtdClientes == 0) {
         printf("Não há clientes cadastrados para o sorteio.\n");
         return;
     }
-    sorteado = rand() % qtdClientes;    /* posição de 0 a qtdClientes-1 */
+    semente = lerInt("Digite um número da sorte: ");
+    srand(semente);                     /* o número que foi digitado vira a semente */
+    sorteado = rand() % qtdClientes;
     printf("Cliente sorteado: %s\n", clientes[sorteado].nome);
 }
 
-/* ===== Programa principal ===== */
+/*  Programa principal  */
 
 int main() {
     int opcao;
@@ -505,10 +506,8 @@ int main() {
     system("chcp 65001 > nul");   /* UTF-8 no terminal do Windows (acentos) */
 #endif
 
-    srand(time(NULL));   /* semente diferente a cada execução */
-
     do {
-        printf("\n===== CARTEIRA DIGITAL =====\n");
+        printf("\n CARTEIRA DIGITAL \n");
         printf("1 - Abrir o banco\n");
         printf("2 - Consultar histórico\n");
         printf("3 - Efetuar sorteio\n");
